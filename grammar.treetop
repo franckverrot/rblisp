@@ -13,7 +13,7 @@ grammar RbLisp
   end
 
   rule define
-    "define" space? identifier space? integer <Define>
+    "define" space? identifier space? definition:(float / integer / string) <Define>
   end
 
   rule literal

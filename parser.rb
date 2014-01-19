@@ -15,10 +15,22 @@ class RbLispTest < MiniTest::Test
     assert_equal env, {}
   end
 
-  def test_parse_define
+  def test_parse_define_integer
     result, env = parse("(define x 1)").eval
     assert_equal 1, result
     assert_equal env, {"x" => 1}
+  end
+
+  def test_parse_define_float
+    result, env = parse("(define x 1.1)").eval
+    assert_equal 1.1, result
+    assert_equal env, {"x" => 1.1}
+  end
+
+  def test_parse_define_string
+    result, env = parse("(define x \"hello world\")").eval
+    assert_equal "hello world", result
+    assert_equal env, {"x" => "hello world"}
   end
 
   def test_get_identifier_from_env

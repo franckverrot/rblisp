@@ -14,14 +14,18 @@ module RbLisp
   end
 
   class StringLiteral < Treetop::Runtime::SyntaxNode
-    def to_array
-      return eval self.text_value
+    def value
+      self.text_value[1..-2]
     end
   end
 
   class FloatLiteral < Treetop::Runtime::SyntaxNode
-    def to_array
-      return self.text_value.to_f
+    def eval(env={})
+      binding.pry
+    end
+
+    def value
+      self.text_value.to_f
     end
   end
 
@@ -64,7 +68,7 @@ module RbLisp
 
   class Define < Treetop::Runtime::SyntaxNode
     def eval(env={})
-      env[identifier.text_value] = self.integer.text_value.to_i
+      env[identifier.text_value] = self.definition.value
     end
   end
 
