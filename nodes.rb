@@ -29,6 +29,12 @@ module RbLisp
     end
   end
 
+  class Function < Treetop::Runtime::SyntaxNode
+    def eval(env={})
+      self.expression
+    end
+  end
+
   class Identifier < Treetop::Runtime::SyntaxNode
     def eval(env={})
       env[self.text_value]

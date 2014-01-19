@@ -9,11 +9,15 @@ grammar RbLisp
   end
 
   rule body
-    (expression / define / add / mul / literal / space )* <Body>
+    (expression / define / function / add / mul / literal / space )* <Body>
   end
 
   rule define
     "define" space? identifier space? definition:literal <Define>
+  end
+
+  rule function
+    "function" space? '(' parameters:(space? identifier space?)* ')' space? expression <Function>
   end
 
   rule literal
