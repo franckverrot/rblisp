@@ -33,6 +33,12 @@ class RbLispTest < MiniTest::Test
     assert_equal env, {"x" => "hello world"}
   end
 
+  def test_parse_define_existing_literal
+    result, env = parse("(define x val)").eval("val" => "hello world")
+    assert_equal "hello world", result
+    assert_equal env, {"x" => "hello world", "val" => "hello world"}
+  end
+
   def test_get_identifier_from_env
     result, env = parse("(x)").eval('x' => 42)
     assert_equal 42, result

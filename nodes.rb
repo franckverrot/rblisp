@@ -14,7 +14,7 @@ module RbLisp
   end
 
   class StringLiteral < Treetop::Runtime::SyntaxNode
-    def value
+    def value(env={})
       self.text_value[1..-2]
     end
   end
@@ -24,7 +24,7 @@ module RbLisp
       binding.pry
     end
 
-    def value
+    def value(env={})
       self.text_value.to_f
     end
   end
@@ -68,7 +68,7 @@ module RbLisp
 
   class Define < Treetop::Runtime::SyntaxNode
     def eval(env={})
-      env[identifier.text_value] = self.definition.value
+      env[identifier.text_value] = self.definition.value(env)
     end
   end
 
