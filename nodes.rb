@@ -48,6 +48,12 @@ module RbLisp
     end
   end
 
+  class Mul < Treetop::Runtime::SyntaxNode
+    def eval(env={})
+      self.car.value(env) * self.cdr.value(env)
+    end
+  end
+
   class Body < Treetop::Runtime::SyntaxNode
     def eval(env={})
       last = nil

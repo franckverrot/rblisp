@@ -40,8 +40,8 @@ class RbLispTest < MiniTest::Test
   end
 
   def test_add_identifier_to_literal
-    result, env = parse("(+ x y)").eval('x' => 42, 'y' => 42)
-    assert_equal 84, result
-    assert_equal env, {'x' => 42, 'y' => 42}
+    result, env = parse("(* x y)").eval('x' => 6, 'y' => 7)
+    assert_equal 42, result
+    assert_equal env, {'x' => 6, 'y' => 7}
   end
 end

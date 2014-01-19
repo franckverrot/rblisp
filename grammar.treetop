@@ -9,7 +9,7 @@ grammar RbLisp
   end
 
   rule body
-    (expression / define / add / literal / space )* <Body>
+    (expression / define / add / mul / literal / space )* <Body>
   end
 
   rule define
@@ -22,6 +22,10 @@ grammar RbLisp
 
   rule add
     "+" space? car:(expression / literal) space? cdr:(expression / literal) <Add>
+  end
+
+  rule mul
+    "*" space? car:(expression / literal) space? cdr:(expression / literal) <Mul>
   end
 
   rule integer
