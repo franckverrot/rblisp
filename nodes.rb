@@ -1,6 +1,14 @@
 module RbLisp
   class IntegerLiteral < Treetop::Runtime::SyntaxNode
     def eval(env={})
+      value
+    end
+
+    def +(operand)
+      value + operand.value
+    end
+
+    def value(env={})
       self.text_value.to_i
     end
   end
@@ -19,14 +27,24 @@ module RbLisp
 
   class Identifier < Treetop::Runtime::SyntaxNode
     def eval(env={})
-      env[self.text_value] = 42
-      self.text_value
+      env[self.text_value]
+    end
+
+    def value(env={})
+      env[self.text_value]
     end
   end
+
 
   class Expression < Treetop::Runtime::SyntaxNode
     def eval(env={})
       self.body.eval(env)
+    end
+  end
+
+  class Add < Treetop::Runtime::SyntaxNode
+    def eval(env={})
+      self.car.value(env) + self.cdr.value(env)
     end
   end
 
@@ -51,7 +69,7 @@ module RbLisp
       expressions.each do |exp|
         last_eval = exp.eval(env)
       end
-      last_eval
+      [last_eval, env]
     end
 
     def expressions
