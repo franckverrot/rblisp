@@ -1,5 +1,8 @@
 module RbLisp
-  class IntegerLiteral < Treetop::Runtime::SyntaxNode
+  class Node < Treetop::Runtime::SyntaxNode
+  end
+
+  class IntegerLiteral < Node
     def eval(env={})
       value
     end
@@ -13,13 +16,13 @@ module RbLisp
     end
   end
 
-  class StringLiteral < Treetop::Runtime::SyntaxNode
+  class StringLiteral < Node
     def value(env={})
       self.text_value[1..-2]
     end
   end
 
-  class FloatLiteral < Treetop::Runtime::SyntaxNode
+  class FloatLiteral < Node
     def eval(env={})
       binding.pry
     end
@@ -29,13 +32,27 @@ module RbLisp
     end
   end
 
-  class Function < Treetop::Runtime::SyntaxNode
+  class FunctionCall < Node
     def eval(env={})
-      self.expression
+      binding.pry
     end
   end
 
-  class Identifier < Treetop::Runtime::SyntaxNode
+  class FunctionDefinition
+    def initialize(func)
+      @parameters = func.parameters
+      @expression = func.expression
+    end
+  end
+
+  class Function < Node
+    def eval(env={})
+      env[self.__id__] = FunctionDefinition.new(self)
+      self.__id__
+    end
+  end
+
+  class Identifier < Node
     def eval(env={})
       env[self.text_value]
     end
@@ -46,39 +63,39 @@ module RbLisp
   end
 
 
-  class Expression < Treetop::Runtime::SyntaxNode
+  class Expression < Node
     def eval(env={})
       self.body.eval(env)
     end
   end
 
-  class Add < Treetop::Runtime::SyntaxNode
+  class Add < Node
     def eval(env={})
       self.car.value(env) + self.cdr.value(env)
     end
   end
 
-  class Mul < Treetop::Runtime::SyntaxNode
+  class Mul < Node
     def eval(env={})
       self.car.value(env) * self.cdr.value(env)
     end
   end
 
-  class Body < Treetop::Runtime::SyntaxNode
+  class Body < Node
     def eval(env={})
       last = nil
-      self.elements.map {|e| last = e.eval(env) }
+      self.elements.map {|e| last = e.eval(env); binding.pry }
       last
     end
   end
 
-  class Define < Treetop::Runtime::SyntaxNode
+  class Define < Node
     def eval(env={})
       env[identifier.text_value] = self.definition.value(env)
     end
   end
 
-  class Program < Treetop::Runtime::SyntaxNode
+  class Program < Node
     def eval(env={})
       env = env.clone
       last_eval = nil

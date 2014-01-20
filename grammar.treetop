@@ -8,16 +8,24 @@ grammar RbLisp
     space? '(' body ')' space? <Expression>
   end
 
+  rule function_call
+    '(' space? name:identifier space? parameters? space? ')' <FunctionCall>
+  end
+
   rule body
-    (expression / define / function / add / mul / literal / space )* <Body>
+    (expression / define / function_call / function / add / mul / literal / space )* <Body>
   end
 
   rule define
     "define" space? identifier space? definition:literal <Define>
   end
 
+  rule parameters
+    '(' space? parameters:(space? (identifier / literal) space?)* ')'
+  end
+
   rule function
-    "function" space? '(' parameters:(space? identifier space?)* ')' space? expression <Function>
+    "function" space? parameters space? expression <Function>
   end
 
   rule literal

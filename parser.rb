@@ -69,4 +69,11 @@ class RbLispTest < MiniTest::Test
     assert_instance_of RbLisp::Expression, result
     assert_equal env, {}
   end
+
+  def test_execute_immediate_function
+    result, env = parse("((function (toto) (42)) 1337)").eval
+
+    assert_equal 42, result
+    assert_equal env, {}
+  end
 end
